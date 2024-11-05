@@ -1,32 +1,79 @@
-// pages/places.tsx
+// app/places/index.tsx
 "use client"
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function Places() {
-  const router = useRouter();
-  const { state } = router.query;
+type BinStore = {
+  fsq_id: string;
+  name: string;
+  location?: {
+    formatted_address?: string;
+  };
+  contact?: {
+    phone?: string;
+  };
+  website?: string;
+};
 
-  // Local state to hold the name of the selected state
-  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
+type PlacesProps = {
+  initialBinStores: BinStore[];
+  error?: string;
+};
+
+export default function BinStores({ initialBinStores, error }: PlacesProps) {
+  const searchParams = useSearchParams();
+  const state = searchParams.get('state'); // Get the 'state' query parameter
+
+  const [binStores, setBinStores] = useState<BinStore[]>(initialBinStores);
 
   useEffect(() => {
-    if (typeof state === 'string') {
-      setSelectedState(state);
+    if (!initialBinStores && state) {
+      fetchBinStores(state);
     }
-  }, [state]);
+  }, [state, initialBinStores]);
+
+  async function fetchBinStores(stateParam: string) {
+    try {
+      const response = await fetch(`/api/fetchBinStores?state=${stateParam}`);
+      const data = await response.json();
+      if (data.binStores) {
+        setBinStores(data.binStores);
+      } else {
+        throw new Error("Failed to fetch bin stores");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md w-80 text-center">
-        {selectedState ? (
-          <>
-            <h1 className="text-2xl font-bold mb-4">Places in {selectedState}</h1>
-            {/* Placeholder for places content */}
-            <p>Displaying places of interest in {selectedState}...</p>
-          </>
+    <div>
+      <h1>Bin Stores in {state}</h1>
+      <div>
+        {binStores && binStores.length > 0 ? (
+          binStores.map((store) => (
+            <div key={store.fsq_id} className="mb-4 p-4 border border-gray-200 rounded-lg shadow">
+              <h2 className="text-xl font-bold">{store.name}</h2>
+              <p><strong>Address:</strong> {store.location?.formatted_address || "Not available"}</p>
+              <p><strong>Phone:</strong> {store.contact?.phone || "Not available"}</p>
+              {store.website ? (
+                <p>
+                  <strong>Website:</strong>{' '}
+                  <a href={store.website} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                    {store.website}
+                  </a>
+                </p>
+              ) : (
+                <p><strong>Website:</strong> Not available</p>
+              )}
+            </div>
+          ))
         ) : (
-          <p>Loading...</p>
+          <p>No bin stores found</p>
         )}
       </div>
     </div>
