@@ -34,7 +34,7 @@ export default function BinStores({ initialBinStores, error }: PlacesProps) {
 
   async function fetchBinStores(stateParam: string) {
     try {
-      const response = await fetch(`/api/fetchBinStores?state=${stateParam}`);
+      const response = await fetch(`/api/?state=${stateParam}`);
       const data = await response.json();
       if (data.binStores) {
         setBinStores(data.binStores);
