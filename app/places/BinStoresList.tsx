@@ -13,7 +13,8 @@ export function BinStoresList({ binStores }: BinStoresListProps) {
     <div>
       {binStores.length > 0 ? (
         binStores.map((store) => (
-          <div key={store.fsq_id} className="mb-4 p-4 border border-gray-200 rounded-lg shadow bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30">
+          <div className="bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30">
+          <div key={store.fsq_id} className="mb-4 p-4 border border-gray-200 rounded-lg shadow">
             <h2 className="text-xl font-bold">{store.name}</h2>
             <p><strong>Address:</strong> {store.location?.formatted_address || "Not available"}</p>
             <p><strong>Phone:</strong> {store.contact?.phone || "Not available"}</p>
@@ -27,7 +28,7 @@ export function BinStoresList({ binStores }: BinStoresListProps) {
             ) : (
               <p><strong>Website:</strong> Not available</p>
             )}
-          </div>
+          </div></div>
         ))
       ) : (
         <p>No bin stores found</p>
