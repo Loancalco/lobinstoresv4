@@ -18,6 +18,7 @@ export async function GET(request: Request) {
       headers: {
 'x-rapidapi-key': 'a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5',
 'x-rapidapi-host': 'local-business-data.p.rapidapi.com'
+      },
     });
 
     if (!response.ok) {
