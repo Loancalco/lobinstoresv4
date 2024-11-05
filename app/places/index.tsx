@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export default function Places() {
   const router = useRouter();
-  const { state } = router;
+  const { state } = router.query;
 
   // Local state to hold the name of the selected state
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
