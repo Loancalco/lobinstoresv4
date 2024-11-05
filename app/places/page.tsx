@@ -13,26 +13,32 @@ type BinStoresResponse = {
 
 // Fetch bin stores data on the server side
 async function getBinStores(state: string): Promise<BinStoresResponse> {
- // const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
-  const apiUrl = `https://local-business-data.p.rapidapi.com/search?query=bin%20stores%20in%20${state}`;
+  const apiKey = process.env.NEXT_PUBLIC_RAPIDAPI_KEY;
+  const apiHost = process.env.NEXT_PUBLIC_RAPIDAPI_HOST || 'local-business-data.p.rapidapi.com';
+  const apiUrl = `https://${apiHost}/search?query=bin%20stores%20in%20${state}`;
+
+  if (!apiKey) {
+    console.error("RapidAPI Key is missing.");
+    return { error: "RapidAPI Key is not configured." };
+  }
 
   try {
     const response = await fetch(apiUrl, {
       headers: {
-  'x-rapidapi-key': 'a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5',
-'x-rapidapi-host': 'local-business-data.p.rapidapi.com',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': apiHost,
       },
-      // Enable cache control for SSR (optional, depending on how often data changes)
       cache: 'no-store',
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch data from Foursquare API");
+      throw new Error(`Failed to fetch data from RapidAPI: ${response.status} - ${response.statusText}`);
     }
 
     const data = await response.json();
-    return { binStores: data.results || [] };
+    return { binStores: data.results || [] }; // Adjust this based on the API response structure
   } catch (error) {
+    console.error("Fetch error:", error); // Log the error details
     return { error: "Could not fetch bin stores. Please try again." };
   }
 }
@@ -60,11 +66,10 @@ const PlacesPage: NextPage<PageProps> = async ({ searchParams }) => {
   const { binStores } = result;
 
   return (
-     <div className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900">Bin Stores in {state}</h1>
+    <div>
+      <h1>Bin Stores in {state}</h1>
       <BinStoresList binStores={binStores} />
-    </div></div>
+    </div>
   );
 };
 
