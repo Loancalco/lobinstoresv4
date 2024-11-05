@@ -1,7 +1,7 @@
 "use client"
 // pages/index.tsx
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { useRouter } from 'next/compat/router';
+import { useRouter } from 'next/navigation';
 import { Alert, Button } from "flowbite-react";
 
 export default function Home() {
