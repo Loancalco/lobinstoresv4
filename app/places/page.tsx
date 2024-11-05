@@ -19,8 +19,8 @@ async function getBinStores(state: string): Promise<BinStoresResponse> {
   try {
     const response = await fetch(apiUrl, {
       headers: {
-      x-rapidapi-key: a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5,
-      x-rapidapi-host: local-business-data.p.rapidapi.com,
+  'x-rapidapi-key': 'a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5',
+'x-rapidapi-host': 'local-business-data.p.rapidapi.com',
       },
       // Enable cache control for SSR (optional, depending on how often data changes)
       cache: 'no-store',
