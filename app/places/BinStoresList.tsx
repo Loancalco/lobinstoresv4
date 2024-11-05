@@ -13,7 +13,7 @@ export function BinStoresList({ binStores }: BinStoresListProps) {
     <div>
       {binStores.length > 0 ? (
         binStores.map((data) => (
-          <div key={store.fsq_id} className="mb-4 p-4 border border-gray-200 roundedo-lg shadow">
+          <div key={data.request_id} className="mb-4 p-4 border border-gray-200 roundedo-lg shadow">
             <h2 className="text-xl font-bold">{data.name}</h2>
             <p><strong>Address:</strong> {data.location?.formatted_address || "Not available"}</p>
             <p><strong>Phone:</strong> {data.contact?.phone || "Not available"}</p>
