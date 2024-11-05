@@ -1,7 +1,7 @@
 // pages/index.js
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Alert, Button } from "tailwindcss";
+import { Alert, Button } from "flowbite-react";
 
 export default function Home() {
   const router = useRouter();
