@@ -1,4 +1,4 @@
-// pages/index.js
+"use client"
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Alert, Button } from "flowbite-react";
