@@ -5,20 +5,19 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const state = searchParams.get('state');
-  const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
+  //const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
 
   if (!state) {
     return NextResponse.json({ error: "State parameter is required" }, { status: 400 });
   }
 
-  if (!apiKey) {
-    return NextResponse.json({ error: "Foursquare API key is missing" }, { status: 500 });
-  }
+  
 
   try {
-    const response = await fetch(`https://api.foursquare.com/v3/places/search?near=${state}`, {
+    const response = await fetch(`https://local-business-data.p.rapidapi.com/search?query=bin stores in ${state}`, {
       headers: {
-        Authorization: apiKey,
+        x-rapidapi-key: a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5,
+      x-rapidapi-host: local-business-data.p.rapidapi.com
       },
     });
 
