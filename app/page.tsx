@@ -2,7 +2,7 @@
 // pages/index.tsx
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Alert, Button } from "flowbite-react";
+import { Button } from "flowbite-react";
 
 export default function Home() {
   const router = useRouter();
@@ -28,12 +28,7 @@ export default function Home() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <Alert color="warning" rounded>
-        <span className="font-medium">Info alert!</span> Change a few things up
-        and try submitting again.
-      </Alert>
-
-      <Button>Click me</Button>
+   
       
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-80">
         <h1 className="text-2xl font-bold mb-4">Select a State</h1>
