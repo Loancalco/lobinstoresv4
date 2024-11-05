@@ -14,7 +14,7 @@ type BinStoresResponse = {
 // Fetch bin stores data on the server side
 async function getBinStores(state: string): Promise<BinStoresResponse> {
  // const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
-  const apiUrl = `https://local-business-data.p.rapidapi.com/search?query=bin stores in ${state}`;
+  const apiUrl = `https://local-business-data.p.rapidapi.com/search?query=bin%20stores%20in%20${state}`;
 
   try {
     const response = await fetch(apiUrl, {
