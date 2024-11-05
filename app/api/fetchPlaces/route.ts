@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   
 
   try {
-    const response = await fetch(`https://local-business-data.p.rapidapi.com/search?query=bin stores in ${state}`, {
+    const response = await fetch(`https://local-business-data.p.rapidapi.com/search?query=bin%20stores%20in%20${state}`, {
       headers: {
 'x-rapidapi-key': 'a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5',
 'x-rapidapi-host': 'local-business-data.p.rapidapi.com'
