@@ -2,9 +2,17 @@
 
 import { BinStoresList } from './BinStoresList';
 import { BinStore } from './types';
+import { NextPage } from 'next';
+
+// Define a type for the return type of getBinStores
+type BinStoresResponse = {
+  binStores: BinStore[];
+} | {
+  error: string;
+};
 
 // Fetch bin stores data on the server side
-async function getBinStores(state: string): Promise<{ binStores: BinStore[] } | { error: string }> {
+async function getBinStores(state: string): Promise<BinStoresResponse> {
   const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
   const apiUrl = `https://api.foursquare.com/v3/places/search?near=${state}&query=bin%20store`;
 
@@ -34,18 +42,21 @@ type PageProps = {
   };
 };
 
-export default async function PlacesPage({ searchParams }: PageProps) {
+const PlacesPage: NextPage<PageProps> = async ({ searchParams }) => {
   const state = searchParams.state || '';
   
   if (!state) {
     return <p>Please provide a state parameter in the URL.</p>;
   }
 
-  const { binStores, error } = await getBinStores(state);
+  const result = await getBinStores(state);
 
-  if (error) {
-    return <p>{error}</p>;
+  // Type Narrowing
+  if ("error" in result) {
+    return <p>{result.error}</p>;
   }
+
+  const { binStores } = result;
 
   return (
     <div>
@@ -53,4 +64,6 @@ export default async function PlacesPage({ searchParams }: PageProps) {
       <BinStoresList binStores={binStores} />
     </div>
   );
-}
+};
+
+export default PlacesPage;
