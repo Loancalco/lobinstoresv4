@@ -13,13 +13,14 @@ type BinStoresResponse = {
 
 // Fetch bin stores data on the server side
 async function getBinStores(state: string): Promise<BinStoresResponse> {
-  const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
-  const apiUrl = `https://api.foursquare.com/v3/places/search?near=${state}&query=bin%20store`;
+ // const apiKey = process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY;
+  const apiUrl = `https://local-business-data.p.rapidapi.com/search?query=bin stores in ${state}`;
 
   try {
     const response = await fetch(apiUrl, {
       headers: {
-        Authorization: apiKey || '',
+      x-rapidapi-key: a155812e96msh3d468699207ae72p1c60dbjsn964b74afebd5,
+      x-rapidapi-host: local-business-data.p.rapidapi.com,
       },
       // Enable cache control for SSR (optional, depending on how often data changes)
       cache: 'no-store',
