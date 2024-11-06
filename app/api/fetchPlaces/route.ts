@@ -1,41 +1,33 @@
 // app/api/fetchPlaces/route.ts
 
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const state = searchParams.get('state');
-  const apiKey = process.env.NEXT_PUBLIC_RAPIDAPI_KEY;
-  const apiHost = process.env.NEXT_PUBLIC_RAPIDAPI_HOST || 'local-business-data.p.rapidapi.com';
-  const apiUrl = `https://${apiHost}/search?query=bin%20stores%20in%20${state}`;
 
   if (!state) {
     return NextResponse.json({ error: "State parameter is required" }, { status: 400 });
   }
 
-  if (!apiKey) {
-    console.error("RapidAPI Key is missing.");
-    return NextResponse.json({ error: "RapidAPI Key is not configured." }, { status: 500 });
-  }
-
   try {
-    const response = await fetch(apiUrl, {
-      headers: {
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': apiHost,
-      },
-    });
+    // Build the path to the state-specific JSON file
+    const filePath = path.join(process.cwd(), 'data', `${state}.json`);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data from RapidAPI: ${response.status} - ${response.statusText}`);
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+      return NextResponse.json({ error: `Data for ${state} not found.` }, { status: 404 });
     }
 
-    const data = await response.json();
-    console.log("API Response Data:", data); // Log the full response for debugging
+    // Read and parse the JSON data
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const binStores = JSON.parse(fileContents);
 
-    return NextResponse.json({ binStores: data.results || [] });
+    return NextResponse.json({ binStores });
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Error reading bin stores data:", error);
     return NextResponse.json({ error: "Could not fetch bin stores. Please try again." }, { status: 500 });
   }
 }
